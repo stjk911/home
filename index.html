@@ -62,4 +62,29 @@
     let tableHTML = "<table><thead><tr>";
 
     if (showGH) {
-      tableHTML += "<th>Data</t
+      tableHTML += "<th>Data</th><th>Danie dnia</th></tr></thead><tbody>";
+      for (let i = 1; i < rows.length; i++) {
+        tableHTML += `<tr><td>${rows[i][6] || ""}</td><td>${rows[i][7] || ""}</td></tr>`;
+      }
+    } else {
+      tableHTML += "<th>Kolumna A</th></tr></thead><tbody>";
+      for (let i = 1; i < rows.length; i++) {
+        tableHTML += `<tr><td>${rows[i][0] || ""}</td></tr>`;
+      }
+    }
+
+    tableHTML += "</tbody></table>";
+    container.innerHTML = tableHTML;
+  }
+
+  document.getElementById("toggleButton").addEventListener("click", () => {
+    showGH = !showGH;
+    document.getElementById("toggleButton").textContent = showGH ? "Pokaż kolumnę A" : "Pokaż kolumny G i H";
+    loadTable();
+  });
+
+  loadTable();
+</script>
+
+</body>
+</html>
