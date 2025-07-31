@@ -2,110 +2,64 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Tabela z Google Sheets (filtrowanie JS)</title>
+  <title>Menu Dnia</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      color: #333;
-    }
-    button {
-      padding: 10px 20px;
-      margin-bottom: 20px;
-      background-color: #4285f4;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #3367d6;
-    }
     table {
       border-collapse: collapse;
       width: 100%;
-      background-color: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-top: 10px;
     }
+
     th, td {
-      padding: 10px 14px;
-      border: 1px solid #e0e0e0;
-      text-align: left;
+      border: 1px solid #ddd;
+      padding: 8px;
     }
-    th {
-      background-color: #f0f0f0;
-      font-weight: bold;
-      color: #333;
-    }
+
     tr:nth-child(even) {
-      background-color: #f9f9f9;
+      background-color: #f2f2f2;
     }
+
     tr:hover {
-      background-color: #eef;
+      background-color: #e0e0e0;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #toggleButton {
+      margin: 10px 0;
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #toggleButton:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
-  <h1>Dane z Google Sheets</h1>
-  <button onclick="toggleView()">Zmień widok kolumn (G+H ↔ A)</button>
-  <table id="tabela"></table>
 
-  <script>
-    const sheetID = "1HV837edQ2chj0REdQ7592icduUSuaC_m5lLaEz0W-64";
-    const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+<h2>Dania dnia</h2>
+<button id="toggleButton">Pokaż kolumnę A</button>
+<div id="tableContainer">Ładowanie danych...</div>
 
-    let currentView = "gh"; // domyślny widok
-    let cachedData = null;
+<script>
+  const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSe7NoSgOUQN9kBHTeVn5UVZpYvl7kG8j39JLHBFQY-ttF-7pu8SS0GVaAbWEdXGJAK-yOmx_umoWkV/pub?output=csv";
 
-    function loadData() {
-      fetch(url)
-        .then(res => res.text())
-        .then(text => {
-          const json = JSON.parse(text.substring(47).slice(0, -2));
-          cachedData = json;
-          renderTable();
-        });
-    }
+  let showGH = true;
 
-    function renderTable() {
-      const table = document.getElementById("tabela");
-      table.innerHTML = "";
+  async function loadTable() {
+    const response = await fetch(sheetURL);
+    const data = await response.text();
+    const rows = data.trim().split("\n").map(row => row.split(","));
 
-      const columnIndexes = currentView === "gh" ? [6, 7] : [0];
+    const container = document.getElementById("tableContainer");
+    let tableHTML = "<table><thead><tr>";
 
-      const headers = columnIndexes.map(i => cachedData.table.cols[i]?.label || `Kolumna ${i + 1}`);
-      const thead = document.createElement("thead");
-      const headerRow = document.createElement("tr");
-      headers.forEach(header => {
-        const th = document.createElement("th");
-        th.textContent = header;
-        headerRow.appendChild(th);
-      });
-      thead.appendChild(headerRow);
-      table.appendChild(thead);
-
-      const tbody = document.createElement("tbody");
-      cachedData.table.rows.forEach(row => {
-        const tr = document.createElement("tr");
-        columnIndexes.forEach(i => {
-          const td = document.createElement("td");
-          td.textContent = row.c[i]?.v ?? "";
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-      table.appendChild(tbody);
-    }
-
-    function toggleView() {
-      currentView = currentView === "gh" ? "a" : "gh";
-      renderTable();
-    }
-
-    window.onload = loadData;
-  </script>
-</body>
-</html>
+    if (showGH) {
+      tableHTML += "<th>Data</t
