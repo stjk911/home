@@ -1,31 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Dane z Google Sheets</title>
+  <meta charset="utf-8">
+  <title>Dania dnia — podgląd</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    table {
-      border-collapse: collapse;
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, Arial, sans-serif;
+      background: #f5f5f5;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: 1.1rem;
+      margin: 0;
+      color: #222;
+      font-weight: 700;
+    }
+    .frame {
       width: 100%;
-    }
-    th, td {
-      padding: 8px;
+      height: calc(100vh - 90px); /* pełna wysokość minus nagłówek */
       border: 1px solid #ddd;
-      text-align: left;
+      border-radius: 8px;
+      background: #fff;
     }
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
+    .note {
+      font-size: .9rem;
+      color: #666;
     }
-    button {
-      margin: 10px;
-      padding: 8px 16px;
+    .logo {
+      height: 28px;
+      margin-left: auto;
+      opacity: .9;
+    }
+    @media (max-width: 640px){
+      .frame { height: calc(100vh - 110px); }
     }
   </style>
 </head>
 <body>
-  <button onclick="toggleColumns()">Przełącz kolumny</button>
-  <table id="data-table"></table>
+  <div class="wrap">
+    <header>
+      <h1>Dania dnia — podgląd (GitHub Pages)</h1>
+      <span class="note">Wczytane z aplikacji Google Apps Script</span>
+      <!-- opcjonalne logo -->
+      <img class="logo" src="https://via.placeholder.com/100x28?text=Logo" alt="Logo">
+    </header>
 
-  <script src="script.js"></script>
+    <!-- TU PODMIEŃ na swój adres /exec z wdrożenia web-app -->
+    <iframe
+      class="frame"
+      src="https://script.google.com/macros/s/AKfycbx0VS8GO1f9__dsT6fsPDJedjsIJ-4sIs-H8MrpPUr2h9GB-YHkHDRNMzotTGyum8sDaw/exec"
+      referrerpolicy="no-referrer"
+      loading="lazy"
+      allow="clipboard-write *; clipboard-read *"
+    ></iframe>
+  </div>
 </body>
 </html>
